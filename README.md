@@ -53,9 +53,9 @@ Tiny Tapeout pinout definition.
 ├── docs/
 │   ├── info.md                 Tiny Tapeout project datasheet (how it works / how to test)
 │   └── images/gds_render.png   Routed GDSII layout render
-├── info.yaml                Tiny Tapeout project + pinout definition
-└── .github/workflows/       CI: RTL tests, GDS hardening, FPGA build, docs build
+└── info.yaml                Tiny Tapeout project + pinout definition
 ```
+
 
 ## Building and testing
 
@@ -68,8 +68,8 @@ make -B
 ```
 
 This runs the cocotb testbench against the RTL sources in `src/`. To run the same test against the hardened
-gate-level netlist instead (after running the `gds` GitHub Actions workflow, or OpenLane locally), copy the
-resulting netlist to `test/gate_level_netlist.v` and run:
+gate-level netlist instead (after hardening the design with OpenLane), copy the resulting netlist to
+`test/gate_level_netlist.v` and run:
 
 ```sh
 make -B GATES=yes
@@ -77,14 +77,6 @@ make -B GATES=yes
 
 See [`test/README.md`](test/README.md) for more detail, and [`docs/info.md`](docs/info.md) for the
 stimulus/read-out protocol the testbench drives.
-
-### CI
-
-- **`test.yaml`** — runs the cocotb RTL testbench on every push.
-- **`gds.yaml`** — hardens the design to GDSII with OpenLane via the Tiny Tapeout GitHub Action, runs the
-  Tiny Tapeout precheck, and re-runs the testbench against the resulting gate-level netlist.
-- **`fpga.yaml`** — builds an FPGA bitstream (ICE40UP5K) for hardware bring-up/simulation.
-- **`docs.yaml`** — builds the project datasheet from `docs/info.md`.
 
 ## The tapeout journey
 
@@ -122,4 +114,5 @@ The core is verified with a cycle-accurate cocotb testbench (`test/test.py`) run
 the routed SkyWater 130nm gate-level netlist. The test loads a uniform matrix of weights, floods the array
 with activations, and checks that the accumulated partial sums ripple down the systolic columns as expected
 — proving the wavefront dataflow end-to-end on real physical-design output, not just RTL.
+
 
